@@ -1,5 +1,4 @@
-// src/App.js
-import React, { useState } from 'react'; // Import useState
+import React, { useState } from 'react';
 import './App.css';
 import TodoForm from './components/TodoForm';
 import TodoList from './components/TodoList';
@@ -10,13 +9,22 @@ function App() {
     { id: 2, text: 'Build a To-Do App', completed: true },
   ]);
 
+  const addTodo = (text) => {
+    const newTodo = {
+      id: Date.now(),
+      text: text,
+      completed: false,
+    };
+    setTodos([...todos, newTodo]);
+  };
+
   return (
     <div className="App">
       <header>
         <h1>My To-Do List</h1>
       </header>
-      <TodoForm />
-      <TodoList todos={todos} /> {/* Pass todos as a prop */}
+      <TodoForm addTodo={addTodo} />
+      <TodoList todos={todos} />
     </div>
   );
 }
