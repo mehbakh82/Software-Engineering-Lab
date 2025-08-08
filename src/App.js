@@ -33,7 +33,7 @@ function App() {
   return (
     <div className="App">
       <header>
-        <h1>Simple Task Manager</h1>
+        <h1>Ultimate To-Do Tracker</h1>
       </header>
       <TodoForm addTodo={addTodo} />
       <TodoList todos={todos} deleteTodo={deleteTodo} toggleComplete={toggleComplete} />
