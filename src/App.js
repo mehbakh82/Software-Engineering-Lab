@@ -18,13 +18,17 @@ function App() {
     setTodos([...todos, newTodo]);
   };
 
+  const deleteTodo = (id) => {
+    setTodos(todos.filter(todo => todo.id !== id));
+  };
+
   return (
     <div className="App">
       <header>
         <h1>My To-Do List</h1>
       </header>
       <TodoForm addTodo={addTodo} />
-      <TodoList todos={todos} />
+      <TodoList todos={todos} deleteTodo={deleteTodo} />
     </div>
   );
 }
