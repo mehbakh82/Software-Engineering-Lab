@@ -37,6 +37,9 @@ function App() {
       </header>
       <TodoForm addTodo={addTodo} />
       <TodoList todos={todos} deleteTodo={deleteTodo} toggleComplete={toggleComplete} />
+      <footer>
+        <p>Software Engineering Lab Project</p>
+      </footer>
     </div>
   );
 }
