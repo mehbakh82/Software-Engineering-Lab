@@ -1,70 +1,105 @@
-# Getting Started with Create React App
+# آزمایشگاه مهندسی نرم‌افزار: فرانت‌اند ایستا با استقرار خودکار
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+این پروژه به عنوان تکلیف آزمایشگاه مهندسی نرم‌افزار پیاده‌سازی شده است. هدف اصلی این پروژه، ساخت یک برنامه فرانت‌اند ایستا (Static Frontend) با استفاده از کتابخانه React، مدیریت نسخه با Git به صورت حرفه‌ای، و در نهایت، استقرار خودکار (Continuous Deployment) آن بر روی GitHub Pages با کمک GitHub Actions بوده است.
 
-## Available Scripts
+**🔗 آدرس وب‌سایت مستقر شده:** [https://mehbakh82.github.io/Software-Engineering-Lab/](https://mehbakh82.github.io/Software-Engineering-Lab/)
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## 📄 گزارش جزئیات پیاده‌سازی
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+در این بخش، فرآیندهای طی شده در طول توسعه، چالش‌های پیش‌آمده و استراتژی‌های به کار رفته تشریح می‌شوند.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### فرآیند کلی پیاده‌سازی
+پروژه با استفاده از `create-react-app` به عنوان یک برنامه React استاندارد آغاز شد. پس از راه‌اندازی اولیه، یک گردش کار مبتنی بر Git Flow ساده‌شده، پیاده‌سازی گردید. توسعه‌ی قابلیت‌های اصلی برنامه، که یک "لیست وظایف" (To-Do List) بود، در شاخه‌های `feature` مجزا صورت گرفت. این قابلیت‌ها شامل افزودن، حذف و علامت‌گذاری وظایف به عنوان انجام‌شده بود.
 
-### `npm test`
+یکی از اهداف کلیدی آزمایش، شبیه‌سازی همکاری تیمی و مدیریت تعارض‌ها (Conflicts) بود. برای این منظور، دو سناریوی تعارض ادغام (Merge Conflict) به صورت برنامه‌ریزی‌شده ایجاد و با موفقیت حل گردید. این تعارض‌ها یک بار بر روی کد `JavaScript (JSX)` در کامپوننت اصلی و بار دیگر بر روی کدهای `CSS` اعمال شد تا تسلط بر حل تعارض در شرایط مختلف نشان داده شود.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+در نهایت، پس از تکمیل قابلیت‌ها و ادغام آن‌ها در شاخه `dev`، فرآیند استقرار خودکار با GitHub Actions پیکربندی و با ادغام نهایی در شاخه `main`، پروژه به صورت موفقیت‌آمیز بر روی GitHub Pages مستقر شد.
 
-### `npm run build`
+### چالش‌ها و راه‌حل‌ها
+در طول فرآیند پیکربندی و استقرار، با چند چالش واقعی و آموزنده مواجه شدیم که به شرح زیر حل گردیدند:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+1.  **چالش اول: عدم وجود شاخه `main` در مخزن راه دور (Remote)**
+    * **شرح مشکل:** در ابتدای کار، به اشتباه اولین کامیت بر روی شاخه `dev` ثبت شده بود و شاخه `main` هرگز به GitHub ارسال نشده بود. این موضوع در مراحل پایانی و هنگام تلاش برای ایجاد Pull Request به `main` مشخص شد.
+    * **راه‌حل:** با بررسی لاگ محلی (`git log`) مشخص شد که شاخه `main` به صورت محلی وجود دارد ولی push نشده است. با اجرای دستور `git push origin main`، شاخه به مخزن راه دور اضافه شد و سپس در تنظیمات GitHub به عنوان شاخه پیش‌فرض (Default Branch) انتخاب گردید و مشکل حل شد.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+2.  **چالش دوم: خطای استقرار `HttpError: Not Found` در GitHub Actions**
+    * **شرح مشکل:** اولین تلاش برای استقرار خودکار با شکست مواجه شد و لاگ‌ها نشان می‌داد که سرویس GitHub Pages برای دریافت فایل‌ها از Actions پیکربندی نشده است.
+    * **راه‌حل:** راه‌حل این بود که به بخش `Settings > Pages` در مخزن رفته و در قسمت "Build and deployment"، منبع (`Source`) را به `GitHub Actions` تغییر دهیم.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+3.  **چالش سوم: خطای استقرار به دلیل `Environment protection rules`**
+    * **شرح مشکل:** پس از حل مشکل اول، استقرار مجدداً با خطای `Branch "main" is not allowed to deploy` شکست خورد.
+    * **راه‌حل:** این خطا به دلیل قوانین حفاظتی محیط استقرار (Environment) در گیت‌هاب بود. برای حل آن، به بخش `Settings > Environments` رفته، محیط `github-pages` را انتخاب کرده و در بخش "Deployment branches"، یک قانون جدید برای اجازه دادن به شاخه `main` جهت استقرار، اضافه کردیم. پس از این تغییر، استقرار با موفقیت انجام شد.
 
-### `npm run eject`
+### استراتژی شاخه‌بندی (Branching Strategy)
+در این پروژه از یک استراتژی شاخه‌بندی الهام‌گرفته از Git Flow استفاده شد که به مدیریت بهتر کد و جداسازی محیط توسعه از محیط نهایی کمک شایانی کرد:
+* **`main`**: این شاخه به عنوان شاخه اصلی و پایدار پروژه عمل می‌کند. کدی که روی این شاخه قرار دارد، همیشه نسخه‌ی قابل استقرار و در حال کار نرم‌افزار است. این شاخه محافظت شده است و تنها از طریق Pull Request می‌توان به آن کد اضافه کرد.
+* **`dev`**: شاخه‌ی اصلی توسعه. تمام ویژگی‌های جدید پس از تکمیل، ابتدا به این شاخه ادغام می‌شوند تا در کنار یکدیگر تست شده و از صحت عملکرد کلی اطمینان حاصل شود.
+* **`feature/*`**: برای توسعه‌ی هر ویژگی جدید، یک شاخه با این الگو از `dev` منشعب می‌شود (مانند `feature/update-title` یا `feature/style-add-button`). این شاخه‌ها پس از تکمیل، به `dev` ادغام می‌شوند. این رویکرد به توسعه‌ی موازی و بدون تداخل ویژگی‌ها کمک می‌کند.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### تاریخچه کامیت‌ها (Commit History)
+در طول پروژه، بیش از ۲۰ کامیت معنادار ثبت شد. برای معنادار بودن پیام‌ها، از رویه "Conventional Commits" استفاده شد. هر پیام کامیت دارای یک نوع (Type) است که هدف آن را مشخص می‌کند. این رویکرد به خوانایی و درک سریع تاریخچه پروژه کمک می‌کند.
+انواع اصلی استفاده شده:
+- `feat`: برای افزودن یک قابلیت جدید (e.g., `feat: Implement functionality to add new todos`).
+- `fix`: برای رفع یک باگ یا حل یک تعارض (e.g., `fix: Resolve merge conflict in App.js header`).
+- `style`: برای تغییرات مربوط به استایل و CSS (e.g., `style: Add basic CSS for all components`).
+- `refactor`: برای بازنویسی و بهبود کد بدون تغییر در عملکرد (e.g., `refactor: Rename 'todo-list' class to 'todo-container'`).
+- `ci`: برای تغییرات مربوط به فایل‌های CI/CD و استقرار خودکار (e.g., `ci: Add GitHub Actions workflow for deployment`).
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+---
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## ❓ پاسخ به پرسش‌های تئوری
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### ۱. پوشه‌ی `.git` چیست؟ چه اطلاعاتی در آن ذخیره می‌شود؟ با چه دستوری ساخته می‌شود؟
+پوشه‌ی `.git` قلب یک مخزن گیت است. این یک دایرکتوری مخفی در ریشه‌ی پروژه‌ی شماست که تمام تاریخچه و فراداده‌های (metadata) لازم برای نسخه‌بندی را در خود جای داده است.
 
-## Learn More
+**اطلاعات ذخیره شده:**
+* **`objects`**: پایگاه داده اصلی گیت. تمام کامیت‌ها، درخت‌های فایل (trees) و محتوای فایل‌ها (blobs) به صورت "شیء" در اینجا ذخیره می‌شوند.
+* **`refs`**: اشاره‌گرهایی به کامیت‌های خاص. شامل `heads` (که به آخرین کامیت در هر شاخه اشاره دارد) و `tags` (برای نشانه‌گذاری کامیت‌های مهم).
+* **`HEAD`**: یک فایل که به شاخه‌ی فعلی که روی آن کار می‌کنید، اشاره دارد.
+* **`index`**: این فایل همان ناحیه‌ی `stage` است و لیستی از فایل‌هایی که برای کامیت بعدی آماده شده‌اند را نگه می‌دارد.
+* **`config`**: فایل پیکربندی مخصوص این مخزن (مانند نام کاربری، ایمیل و آدرس remote).
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+این پوشه با دستور `git init` در یک دایرکتوری موجود ساخته می‌شود. دستور `git clone` نیز هنگام کپی کردن یک مخزن از راه دور، این پوشه را به طور خودکار ایجاد می‌کند.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### ۲. منظور از atomic بودن در atomic commit و atomic pull-request چیست؟
+مفهوم "Atomic" (اتمیک یا تجزیه‌ناپذیر) به این معناست که یک عملیات به عنوان یک واحد کامل و غیرقابل تقسیم انجام می‌شود: **یا به طور کامل و موفقیت‌آمیز اجرا می‌شود، یا اصلاً اجرا نمی‌شود و سیستم به حالت قبل از شروع عملیات بازمی‌گردد.**
 
-### Code Splitting
+* **Atomic Commit**: یک کامیت باید یک واحد منطقی و کامل از تغییرات باشد. برای مثال، به جای ثبت تغییرات یک باگ در سه کامیت جداگانه (یکی برای HTML، یکی برای CSS و یکی برای JS)، باید هر سه را در یک کامیت واحد با عنوان "fix: resolve login button issue" ثبت کرد. این کار تضمین می‌کند که تاریخچه‌ی پروژه هرگز در یک حالت نیمه‌کاره یا شکسته قرار نگیرد.
+* **Atomic Pull Request**: یک PR باید یک ویژگی کامل یا یک باگ‌فیکس کامل را در بر بگیرد. ادغام کردن (merging) یک PR یک عملیات اتمیک است. اگر در حین ادغام مشکلی پیش بیاید، کل فرآیند لغو می‌شود و شاخه‌ی هدف دست‌نخورده باقی می‌ماند.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### ۳. تفاوت دستورهای `fetch`, `pull`, `merge`, `rebase` و `cherry-pick` را بیان کنید.
+* **`git fetch`**: تغییرات جدید (کامیت‌ها و شاخه‌ها) را از مخزن راه دور (remote) دانلود می‌کند اما آن‌ها را با کد محلی شما **ادغام نمی‌کند**. این دستور فقط پایگاه داده محلی `.git` شما را به‌روز می‌کند و به شما اجازه می‌دهد تغییرات را قبل از ادغام بررسی کنید.
+* **`git pull`**: ترکیبی از دو دستور `git fetch` و سپس `git merge` است. ابتدا تغییرات را دانلود (`fetch`) و بلافاصله سعی می‌کند آن‌ها را با شاخه‌ی فعلی شما ادغام (`merge`) کند.
+* **`git merge`**: تاریخچه‌ی یک شاخه را با شاخه‌ی دیگر ادغام می‌کند. این کار یک "کامیت ادغام" (merge commit) جدید ایجاد می‌کند که دو والد دارد و تاریخچه‌ی هر دو شاخه را به صورت موازی حفظ می‌کند.
+* **`git rebase`**: کامیت‌های شاخه‌ی فعلی شما را برمی‌دارد و آن‌ها را **دوباره** روی آخرین کامیت شاخه‌ی هدف اعمال می‌کند. این کار یک تاریخچه‌ی **خطی و تمیزتر** ایجاد می‌کند، انگار که تمام کارهای خود را بعد از آخرین تغییرات دیگران انجام داده‌اید. (هشدار: `rebase` تاریخچه را بازنویسی می‌کند و نباید روی شاخه‌های عمومی استفاده شود).
+* **`git cherry-pick`**: به شما اجازه می‌دهد تا یک **کامیت خاص** را از یک شاخه انتخاب کرده و آن را روی شاخه‌ی فعلی خود اعمال کنید. این برای زمانی مفید است که فقط به یک تغییر خاص از یک شاخه‌ی دیگر نیاز دارید.
 
-### Analyzing the Bundle Size
+### ۴. تفاوت دستورهای `reset`, `revert`, `restore`, `switch` و `checkout` را بیان کنید.
+* **`git checkout`**: دستور قدیمی و چندمنظوره که هم برای جابجایی بین شاخه‌ها و هم برای بازگرداندن تغییرات در فایل‌ها استفاده می‌شد. به دلیل همین دوگانگی، در نسخه‌های جدیدتر به دو دستور `switch` و `restore` تقسیم شد.
+* **`git switch`**: منحصراً برای **جابجایی بین شاخه‌ها** استفاده می‌شود (`git switch new-branch`).
+* **`git restore`**: منحصراً برای **بازگرداندن تغییرات در فایل‌های کاری** (`git restore some-file.txt`) یا برای `unstage` کردن فایل‌ها (`git restore --staged <file>`) به کار می‌رود.
+* **`git reset`**: `HEAD` را به یک کامیت مشخص در گذشته **منتقل می‌کند** و کامیت‌های بعدی را از تاریخچه **پاک می‌کند**. این یک عملیات "مخرب" است و نباید برای تغییراتی که قبلاً `push` شده‌اند استفاده شود.
+* **`git revert`**: یک تغییر را با ایجاد یک **کامیت جدید** که آن تغییر را خنثی می‌کند، لغو می‌کند. برای مثال، اگر کامیتی یک خط کد اضافه کرده باشد، `git revert` یک کامیت جدید ایجاد می‌کند که آن خط را حذف می‌کند. این روش "ایمن" برای لغو تغییرات در تاریخچه‌ی عمومی است.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### ۵. منظور از stage یا همان index چیست؟ دستور `stash` چه کاری را انجام می‌دهد؟
+* **Stage (یا Index)**: ناحیه‌ی `stage` یک لایه‌ی میانی بین دایرکتوری کاری شما (Working Directory) و تاریخچه‌ی کامیت‌هاست. وقتی شما فایلی را تغییر می‌دهید، با استفاده از دستور `git add`، یک کپی از آن تغییرات را به ناحیه‌ی `stage` اضافه می‌کنید. `stage` در واقع یک پیش‌نویس برای کامیت بعدی شماست و به شما اجازه می‌دهد تغییرات خود را به صورت دقیق انتخاب و گروه‌بندی کنید.
+* **`git stash`**: این دستور تغییراتی را که در دایرکتوری کاری و `stage` شما وجود دارند اما هنوز کامیت نشده‌اند، به صورت موقت در یک "پشته" (stack) ذخیره می‌کند و دایرکتوری کاری شما را تمیز می‌کند. این برای زمانی مفید است که در حال کار روی یک ویژگی هستید، اما نیاز فوری دارید که شاخه‌ی خود را تغییر دهید بدون اینکه کارهای نیمه‌تمام خود را کامیت کنید. بعدا می‌توانید با `git stash pop` تغییرات را بازگردانید.
 
-### Making a Progressive Web App
+### ۶. مفهوم snapshot به چه معناست؟ ارتباط آن با commit چیست؟
+گیت اطلاعات را نه به عنوان مجموعه‌ای از تغییرات (deltas)، بلکه به صورت یک سری از **اسنپ‌شات‌ها (snapshots)** ذخیره می‌کند.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+یک **اسنپ‌شات** تصویری کامل از تمام فایل‌ها و پوشه‌های پروژه شما در یک لحظه‌ی خاص از زمان است. وقتی شما یک **کامیت (commit)** ایجاد می‌کنید، گیت در واقع یک اسنپ‌شات از وضعیت فعلی ناحیه‌ی `stage` شما می‌گیرد و آن را در پایگاه داده خود ذخیره می‌کند. سپس یک شیء کامیت ایجاد می‌کند که شامل یک اشاره‌گر به آن اسنپ‌شات، اطلاعات فراداده (نویسنده، تاریخ، پیام کامیت) و اشاره‌گر به کامیت والد است.
 
-### Advanced Configuration
+بنابراین، **یک کامیت یک اشاره‌گر دائمی به یک اسنپ‌شات خاص از پروژه شماست**. این رویکرد گیت را بسیار سریع می‌کند، زیرا برای بازگشت به یک نسخه، نیازی به محاسبه‌ی زنجیره‌ای از تفاوت‌ها نیست؛ گیت فقط اسنپ‌شات کامل آن نسخه را بازیابی می‌کند.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+### ۷. تفاوت‌های local repository و remote repository چیست؟
+* **Local Repository (مخزن محلی)**:
+    * **مکان:** روی کامپیوتر شخصی شما قرار دارد (پوشه‌ای که `.git` را در خود دارد).
+    * **هدف:** شما تمام کارهای روزمره‌ی خود را در اینجا انجام می‌دهید: ویرایش فایل‌ها، `add`, `commit`, `merge`, و غیره. این محیط کاملاً خصوصی شماست و تمام عملیات در آن بسیار سریع است.
+    * **کپی کامل:** مخزن محلی یک کپی کامل و مستقل از کل تاریخچه‌ی پروژه است.
 
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+* **Remote Repository (مخزن راه دور)**:
+    * **مکان:** روی یک سرور در شبکه قرار دارد (مانند سرورهای GitHub, GitLab).
+    * **هدف:** هدف اصلی آن تسهیل **همکاری** بین اعضای تیم و همچنین **پشتیبان‌گیری** از کد است. توسعه‌دهندگان تغییرات محلی خود را با `git push` به آن ارسال می‌کنند و تغییرات دیگران را با `git pull` یا `git fetch` دریافت می‌کنند.
