@@ -22,13 +22,21 @@ function App() {
     setTodos(todos.filter(todo => todo.id !== id));
   };
 
+  const toggleComplete = (id) => {
+    setTodos(
+      todos.map(todo =>
+        todo.id === id ? { ...todo, completed: !todo.completed } : todo
+      )
+    );
+  };
+
   return (
     <div className="App">
       <header>
         <h1>My To-Do List</h1>
       </header>
       <TodoForm addTodo={addTodo} />
-      <TodoList todos={todos} deleteTodo={deleteTodo} />
+      <TodoList todos={todos} deleteTodo={deleteTodo} toggleComplete={toggleComplete} />
     </div>
   );
 }
