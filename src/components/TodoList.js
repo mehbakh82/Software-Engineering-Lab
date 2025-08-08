@@ -2,7 +2,7 @@ import React from 'react';
 
 function TodoList({ todos, deleteTodo, toggleComplete }) {
   return (
-    <div className="todo-list">
+    <div className="todo-container">
       <ul>
         {todos.map(todo => (
           <li key={todo.id} className={todo.completed ? 'completed' : ''}>
